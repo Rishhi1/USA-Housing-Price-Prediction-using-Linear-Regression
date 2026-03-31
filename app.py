@@ -84,15 +84,20 @@ tab1, tab2, tab3 = st.tabs([" Home", " Dashboard", " AI Assistant"])
 # -----------------------------
 with tab1:
     st.markdown("""
-<div class="glass" style="background: rgba(110,71,59,0.25);">
-    <div class="title">🏡 USA Housing Price Predictor</div>
-    <div class="subtitle">
-        Predict housing prices using machine learning models
+    <div class="glass" style="background: rgba(110,71,59,0.25);">
+        <div class="title">🏡 USA Housing Price Predictor</div>
+        <div class="subtitle">
+            Predict housing prices using machine learning models
+        </div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+    
+    # 👇 SPACE BELOW HERO
+    st.markdown("<br>", unsafe_allow_html=True)
+    # 👇 FEATURE CARDS
+    col1, col2, col3 = st.columns(3)
 
-    col1, col2, col3 = st.columns(3)col1.markdown("<div class='glass' style='background: rgba(167,141,120,0.2); margin-right:10px;'>📊 Data Insights</div>", unsafe_allow_html=True)
+    col1.markdown("<div class='glass' style='background: rgba(167,141,120,0.2); margin-right:10px;'>📊 Data Insights</div>", unsafe_allow_html=True)
 
     col2.markdown("<div class='glass' style='background: rgba(190,181,169,0.2); margin:0 10px;'>🏠 Price Prediction</div>", unsafe_allow_html=True)
 
