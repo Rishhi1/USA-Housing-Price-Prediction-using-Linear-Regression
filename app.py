@@ -31,14 +31,14 @@ st.markdown("""
     backdrop-filter: blur(14px);
     padding: 25px;
     border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0, 29, 57, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 29, 57, 0.8);
     transition: 0.3s ease;
     margin-bottom: 25px;
 }
 
 .glass:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(78, 142, 162, 0.6);
+    box-shadow: 0 12px 40px rgba(0, 29, 57, 0.9);
 }
 
 /* Title */
@@ -55,7 +55,7 @@ st.markdown("""
     text-align: center;
 }
 .stButton > button {
-    background: linear-gradient(135deg, #0A4174, #4E8EA2);
+    background: linear-gradient(135deg, #001D39, #0A4174);
     color: #BDD8E9;
     border-radius: 10px;
     height: 45px;
@@ -82,7 +82,7 @@ tab1, tab2, tab3 = st.tabs([" Home", " Dashboard", " AI Assistant"])
 with tab1:
     st.markdown("""
     <div class="glass" style="margin-bottom:30px;">
-        <div class="title">🏡 USA Housing Price Predictor</div>
+        <div class="title"> USA Housing Price Predictor</div>
         <div class="subtitle">
             Predict housing prices using machine learning models
         </div>
