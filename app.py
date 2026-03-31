@@ -33,6 +33,8 @@ st.markdown("""
     border-radius: 18px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     transition: 0.3s ease;
+
+    margin-bottom: 25px;   /* 👈 adds vertical spacing */
 }
 .glass:hover {
     transform: translateY(-5px);
