@@ -1,11 +1,7 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import sqlite3
-import bcrypt
-import openai
 import re
 
 from sklearn.linear_model import LinearRegression
@@ -14,78 +10,63 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 
 # -----------------------------
-# CONFIG
+# PAGE CONFIG
 # -----------------------------
-st.set_page_config(page_title="AI Pricing SaaS", layout="wide")
-
-# -----------------------------
-# DATABASE SETUP
-# -----------------------------
-conn = sqlite3.connect("users.db", check_same_thread=False)
-c = conn.cursor()
-
-c.execute("""
-CREATE TABLE IF NOT EXISTS users (
-    username TEXT,
-    password TEXT
-)
-""")
-conn.commit()
+st.set_page_config(page_title="USA Housing AI", layout="wide")
 
 # -----------------------------
-# AUTH FUNCTIONS
+# PREMIUM UI (GLASS + ANIMATION)
 # -----------------------------
-def hash_password(password):
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+st.markdown("""
+<style>
 
-def check_password(password, hashed):
-    return bcrypt.checkpw(password.encode(), hashed)
+/* Background */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+}
 
-def create_user(username, password):
-    c.execute("INSERT INTO users VALUES (?, ?)", (username, hash_password(password)))
-    conn.commit()
+/* Glass card */
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
+}
+.glass:hover {
+    transform: translateY(-5px);
+}
 
-def login_user(username, password):
-    c.execute("SELECT password FROM users WHERE username=?", (username,))
-    data = c.fetchone()
-    if data:
-        return check_password(password, data[0])
-    return False
+/* Title */
+.title {
+    font-size: 34px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
 
-# -----------------------------
-# LOGIN UI
-# -----------------------------
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
+/* Subtitle */
+.subtitle {
+    color: #cbd5f5;
+    text-align: center;
+}
 
-if not st.session_state.logged_in:
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border-radius: 10px;
+    height: 45px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.stButton > button:hover {
+    transform: scale(1.05);
+}
 
-    st.title("🔐 Login / Signup")
-
-    choice = st.selectbox("Login or Signup", ["Login", "Signup"])
-
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-
-    if choice == "Signup":
-        if st.button("Create Account"):
-            create_user(username, password)
-            st.success("Account created!")
-
-    else:
-        if st.button("Login"):
-            if login_user(username, password):
-                st.session_state.logged_in = True
-                st.rerun()
-            else:
-                st.error("Invalid credentials")
-
-    st.stop()
-
-# -----------------------------
-# OPENAI SETUP
-# -----------------------------
-openai.api_key = st.secrets.get("OPENAI_API_KEY", "")
+</style>
+""", unsafe_allow_html=True)
 
 # -----------------------------
 # TABS
@@ -93,75 +74,140 @@ openai.api_key = st.secrets.get("OPENAI_API_KEY", "")
 tab1, tab2, tab3 = st.tabs(["🏠 Home", "📊 Dashboard", "🤖 AI Assistant"])
 
 # -----------------------------
-# HOME
+# HOME TAB
 # -----------------------------
 with tab1:
-    st.markdown("## 🚀 AI Pricing Intelligence Platform")
-    st.write("Optimize pricing using AI")
+    st.markdown("""
+    <div class="glass">
+        <div class="title">🏡 USA Housing Price Predictor</div>
+        <div class="subtitle">
+            Predict housing prices using machine learning models
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.markdown("<div class='glass'>📊 Data Insights</div>", unsafe_allow_html=True)
+    col2.markdown("<div class='glass'>🏠 Price Prediction</div>", unsafe_allow_html=True)
+    col3.markdown("<div class='glass'>🤖 AI Assistant</div>", unsafe_allow_html=True)
 
 # -----------------------------
-# DASHBOARD
+# MODEL FUNCTIONS
+# -----------------------------
+def preprocess(df, target):
+    df = df.drop_duplicates().ffill()
+    X = pd.get_dummies(df.drop(columns=[target]), drop_first=True)
+    y = df[target]
+    return X, y
+
+def train_model(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
+    model = RandomForestRegressor()
+    model.fit(X_train, y_train)
+    score = r2_score(y_test, model.predict(X_test))
+    return model, X.columns, score
+
+def predict(model, sample, cols):
+    sample = sample.reindex(columns=cols, fill_value=0)
+    return model.predict(sample)[0]
+
+# -----------------------------
+# DASHBOARD TAB
 # -----------------------------
 with tab2:
 
-    uploaded_file = st.file_uploader("Upload Dataset")
+    st.markdown("<div class='glass'>📊 Upload Dataset</div>", unsafe_allow_html=True)
 
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
+    file = st.file_uploader("Upload Housing Dataset")
+
+    if file:
+        df = pd.read_csv(file)
         st.dataframe(df.head())
 
-        target = st.selectbox("Target Column", df.columns)
+        target = st.selectbox("Select Target (Price)", df.columns)
 
         if st.button("Train Model"):
 
-            X = pd.get_dummies(df.drop(columns=[target]))
-            y = df[target]
+            with st.spinner("Training model..."):
 
-            X_train, X_test, y_train, y_test = train_test_split(X, y)
+                X, y = preprocess(df, target)
+                model, cols, score = train_model(X, y)
 
-            model = RandomForestRegressor()
-            model.fit(X_train, y_train)
+                sample = X.iloc[0:1]
 
-            preds = model.predict(X_test)
-            score = r2_score(y_test, preds)
+                # Save
+                st.session_state["model"] = model
+                st.session_state["cols"] = cols
+                st.session_state["sample"] = sample
+                st.session_state["df"] = df
 
-            st.success(f"Model R²: {score:.3f}")
+            st.success(f"Model trained! R² Score: {score:.3f}")
 
-            sample = X.iloc[0:1]
-
-            st.session_state["model"] = model
-            st.session_state["X_cols"] = X.columns
-            st.session_state["sample"] = sample
+            # Visualization
+            st.markdown("### 📈 Feature Distribution")
+            df.hist(figsize=(10,6))
+            st.pyplot(plt)
 
 # -----------------------------
-# CHATBOT
+# CHATBOT LOGIC
+# -----------------------------
+def local_chatbot(query):
+    query = query.lower()
+
+    df = st.session_state.get("df")
+    model = st.session_state.get("model")
+
+    if model is None:
+        return "Please train the model first."
+
+    # prediction from query
+    numbers = re.findall(r"\d+\.?\d*", query)
+
+    if numbers:
+        value = float(numbers[0])
+        sample = st.session_state["sample"].copy()
+
+        # assume first column numeric feature
+        col = sample.columns[0]
+        sample[col] = value
+
+        pred = predict(model, sample, st.session_state["cols"])
+        return f"Predicted house price is ${pred:,.2f}"
+
+    if "columns" in query:
+        return f"Columns: {', '.join(df.columns)}"
+
+    if "rows" in query:
+        return f"Dataset has {df.shape[0]} rows"
+
+    if "summary" in query:
+        return df.describe().to_string()
+
+    return "Ask about price prediction, dataset, or features."
+
+# -----------------------------
+# CHATBOT TAB
 # -----------------------------
 with tab3:
 
-    st.subheader("🤖 AI Assistant")
+    st.markdown("<div class='glass'>🤖 AI Housing Assistant</div>", unsafe_allow_html=True)
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    if "model" not in st.session_state:
+        st.info("Train model first in Dashboard")
 
-    user_input = st.chat_input("Ask anything...")
+    else:
+        if "chat" not in st.session_state:
+            st.session_state.chat = []
 
-    def gpt_reply(prompt):
-        if not openai.api_key:
-            return "No API key provided"
+        user_input = st.chat_input("Ask about housing prices...")
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message.content
+        if user_input:
+            reply = local_chatbot(user_input)
 
-    if user_input:
+            st.session_state.chat.append(("You", user_input))
+            st.session_state.chat.append(("AI", reply))
 
-        reply = gpt_reply(user_input)
-
-        st.session_state.messages.append({"role": "user", "content": user_input})
-        st.session_state.messages.append({"role": "assistant", "content": reply})
-
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.write(msg["content"])
+        for role, msg in st.session_state.chat:
+            with st.chat_message("user" if role=="You" else "assistant"):
+                st.write(msg)
