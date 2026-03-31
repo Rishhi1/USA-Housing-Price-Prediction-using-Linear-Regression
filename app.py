@@ -90,11 +90,9 @@ with tab1:
 
     col1, col2, col3 = st.columns(3)
 
-    col1.markdown("<div class='glass'>📊 Data Insights</div>", unsafe_allow_html=True)
-    col2.markdown("<div class='glass'>🏠 Price Prediction</div>", unsafe_allow_html=True)
-    col3.markdown("<div class='glass'>🤖 AI Assistant</div>", unsafe_allow_html=True)
-
-# -----------------------------
+    col1.markdown("<div class='glass' style='margin-right:10px;'>📊 Data Insights</div>", unsafe_allow_html=True)
+    col2.markdown("<div class='glass' style='margin:0 10px;'>🏠 Price Prediction</div>", unsafe_allow_html=True)
+    col3.markdown("<div class='glass' style='margin-left:10px;'>🤖 AI Assistant</div>", unsafe_allow_html=True)
 # MODEL FUNCTIONS
 # -----------------------------
 def preprocess(df, target):
