@@ -22,48 +22,49 @@ st.markdown("""
 
 /* Background */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #0f172a, #1e293b);
+    background: linear-gradient(135deg, #001D39, #0A4174, #4E8EA2);
 }
 
 /* Glass card */
 .glass {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
+    background: rgba(189, 216, 233, 0.08); /* from #BDD8E9 */
+    backdrop-filter: blur(14px);
     padding: 25px;
     border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 29, 57, 0.6);
     transition: 0.3s ease;
-
-    margin-bottom: 25px;   /* 👈 adds vertical spacing */
+    margin-bottom: 25px;
 }
+
 .glass:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(78, 142, 162, 0.6);
 }
 
 /* Title */
 .title {
     font-size: 34px;
     font-weight: 700;
-    color: white;
+    color: #BDD8E9;
     text-align: center;
 }
 
 /* Subtitle */
 .subtitle {
-    color: #cbd5f5;
+    color: #7BBDE8;
     text-align: center;
 }
-
-/* Buttons */
 .stButton > button {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
+    background: linear-gradient(135deg, #0A4174, #4E8EA2);
+    color: #BDD8E9;
     border-radius: 10px;
     height: 45px;
     font-weight: 600;
     transition: 0.3s;
 }
+
 .stButton > button:hover {
+    background: linear-gradient(135deg, #4E8EA2, #7BBDE8);
     transform: scale(1.05);
 }
 
