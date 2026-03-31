@@ -22,49 +22,52 @@ st.markdown("""
 
 /* Background */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #001D39, #0A4174, #4E8EA2);
+    background: linear-gradient(135deg, #291C0E, #6E473B, #A78D78);
 }
 
 /* Glass card */
 .glass {
-    background: rgba(189, 216, 233, 0.08); /* from #BDD8E9 */
+    background: rgba(225, 212, 194, 0.08); /* #E1D4C2 */
     backdrop-filter: blur(14px);
     padding: 25px;
     border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0, 29, 57, 0.8);
-    transition: 0.3s ease;
+
+    border: 1px solid rgba(190, 181, 169, 0.3); /* #BEB5A9 */
+    box-shadow: 0 10px 30px rgba(41, 28, 14, 0.7); /* #291C0E */
+
     margin-bottom: 25px;
+    transition: 0.3s ease;
 }
 
 .glass:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(0, 29, 57, 0.9);
+    box-shadow: 0 12px 40px rgba(110, 71, 59, 0.8); /* #6E473B */
 }
 
 /* Title */
 .title {
     font-size: 34px;
     font-weight: 700;
-    color: #BDD8E9;
+    color: #E1D4C2;
     text-align: center;
 }
 
 /* Subtitle */
 .subtitle {
-    color: #7BBDE8;
+    color: #BEB5A9;
     text-align: center;
 }
 .stButton > button {
-    background: linear-gradient(135deg, #001D39, #0A4174);
-    color: #BDD8E9;
+    background: linear-gradient(135deg, #6E473B, #A78D78);
+    color: #E1D4C2;
     border-radius: 10px;
     height: 45px;
     font-weight: 600;
-    transition: 0.3s;
 }
 
 .stButton > button:hover {
-    background: linear-gradient(135deg, #4E8EA2, #7BBDE8);
+    background: linear-gradient(135deg, #A78D78, #E1D4C2);
+    color: #291C0E;
     transform: scale(1.05);
 }
 
@@ -81,19 +84,19 @@ tab1, tab2, tab3 = st.tabs([" Home", " Dashboard", " AI Assistant"])
 # -----------------------------
 with tab1:
     st.markdown("""
-    <div class="glass" style="margin-bottom:30px;">
-        <div class="title"> USA Housing Price Predictor</div>
-        <div class="subtitle">
-            Predict housing prices using machine learning models
-        </div>
+<div class="glass" style="background: rgba(110,71,59,0.25);">
+    <div class="title">🏡 USA Housing Price Predictor</div>
+    <div class="subtitle">
+        Predict housing prices using machine learning models
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)col1.markdown("<div class='glass' style='background: rgba(167,141,120,0.2); margin-right:10px;'>📊 Data Insights</div>", unsafe_allow_html=True)
 
-    col1.markdown("<div class='glass' style='margin-right:10px;'>📊 Data Insights</div>", unsafe_allow_html=True)
-    col2.markdown("<div class='glass' style='margin:0 10px;'>🏠 Price Prediction</div>", unsafe_allow_html=True)
-    col3.markdown("<div class='glass' style='margin-left:10px;'>🤖 AI Assistant</div>", unsafe_allow_html=True)
+    col2.markdown("<div class='glass' style='background: rgba(190,181,169,0.2); margin:0 10px;'>🏠 Price Prediction</div>", unsafe_allow_html=True)
+
+    col3.markdown("<div class='glass' style='background: rgba(225,212,194,0.2); margin-left:10px;'>🤖 AI Assistant</div>", unsafe_allow_html=True)
 # MODEL FUNCTIONS
 # -----------------------------
 def preprocess(df, target):
