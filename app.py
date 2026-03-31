@@ -80,7 +80,7 @@ tab1, tab2, tab3 = st.tabs(["🏠 Home", "📊 Dashboard", "🤖 AI Assistant"])
 # -----------------------------
 with tab1:
     st.markdown("""
-    <div class="glass">
+    <div class="glass" style="margin-bottom:30px;">
         <div class="title">🏡 USA Housing Price Predictor</div>
         <div class="subtitle">
             Predict housing prices using machine learning models
