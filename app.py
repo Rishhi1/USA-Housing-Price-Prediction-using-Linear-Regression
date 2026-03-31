@@ -74,7 +74,7 @@ st.markdown("""
 # -----------------------------
 # TABS
 # -----------------------------
-tab1, tab2, tab3 = st.tabs(["🏠 Home", "📊 Dashboard", "🤖 AI Assistant"])
+tab1, tab2, tab3 = st.tabs([" Home", " Dashboard", " AI Assistant"])
 
 # -----------------------------
 # HOME TAB
